@@ -1,0 +1,331 @@
+PL/SQL
+======
+PL/SQL stands for Procedural Language / Structured Query Language.
+
+It is a extension of SQL and it contains following features.
+
+1) We can achieve programming features like control statements ,loops and etc.
+
+2) It reduces network traffic.
+
+3) We can display custom exception/error messages by using the concept of exception handling.
+
+4) We can perform related operations by using the concept of triggers.
+
+5) It compiles and stores PL/SQL program permenent to database for repeated execution.
+
+
+PL/SQL BLOCK
+============
+A PL/SQL program is also known as PL/SQL block.
+
+ex:
+	DECLARE
+	-
+	-	-- Declaration Section 
+	-
+	BEGIN
+	-
+	-	-- Executable Section 
+	-
+	EXCEPTION
+	-
+	-	-- Exception Section 
+	-
+	END;
+	/
+
+	Here '/' is used to submit the PL/SQL program into database.
+
+
+Declaration Section
+------------------
+In declaration section, we will declare variables, exceptions , cursors and etc.
+It is optional section.
+
+Executable Section
+--------------------
+It contains lines of code which is used to complete a table.
+Executable section contains actual logic.
+It is mandatory section.
+
+Exception Section
+-------------------
+It contains lines of code whic is executed when exception is raised.
+It is optional section.
+
+To see the output in PL/SQL we need to set server output environment.
+ex:
+	SQL> set   serveroutput   on 
+
+
+Q) Write a PL/SQL program to display Hello World?
+
+
+	BEGIN
+	DBMS_OUTPUT.PUT_LINE('Hello World');
+	END;
+	/
+
+	Here DBMS_OUTPUT is a package name.
+	Here PUT_LINE is a procedure name.
+
+
+
+Q) Write a PL/SQL program to perform sum of two numbers?
+
+	DECLARE 
+	A number;
+	B number;
+	C number;
+	BEGIN
+	A:=10;
+	B:=20;
+	C:=A+B;
+	DBMS_OUTPUT.PUT_LINE(C);
+	END;
+	/
+
+Declaration and Initialization using single line
+------------------------------------------------
+	Declare
+	A number:=10;
+	B number:=20;
+	C number:=A+B;
+	BEGIN
+	DBMS_OUTPUT.PUT_LINE('sum of two numbers is ='||C);
+	END;
+	/	
+
+
+Using '&' symbol we can read dynamic inputs.
+
+ex:
+---
+	DECLARE 
+	A number;
+	B number;
+	C number;
+	BEGIN
+	A:=&a;
+	B:=&b;
+	C:=A+B;
+	DBMS_OUTPUT.PUT_LINE('sum of two numbers is ='||C);
+	END;
+	/
+
+
+DML operations are allowed in PL/SQL.
+
+
+Q) Write a PL/SQL program to insert a record into student table?
+
+	DECLARE 
+	A number(3);
+	B varchar2(10);
+	C varchar2(12);
+	BEGIN
+	A:=&sno;
+	B:='&sname';
+	C:='&sadd';
+	insert into student values(A,B,C);
+	DBMS_OUTPUT.PUT_LINE('Record Inserted');
+	END;
+	/
+	
+
+Q) Write a PL/SQL program to update student name based on student number?
+
+
+	DECLARE 
+	A number(3);
+	BEGIN
+	A:=&no;
+	update student set sname='rani' where sno=A;
+	DBMS_OUTPUT.PUT_LINE('Record Updated');
+	END;
+	/
+
+
+Q) Write a PL/SQL program to delete a record from student table based on student number?
+
+	DECLARE
+	A number(3);
+	BEGIN
+	A:=&sno;
+	delete from student where sno=A;
+	DBMS_OUTPUT.PUT_LINE('Record Deleted');
+	END;
+	/
+
+DRL operations are allowed in PL/SQL.
+
+To execute select command in PL/SQL we need to use into clause.
+
+
+Q) Write a PL/SQL program to display employee name whose employee id is 201?
+
+	DECLARE 
+	L_Ename  varchar2(10);
+	BEGIN
+	select ename into L_Ename  from emp where eid=201;
+	DBMS_OUTPUT.PUT_LINE(L_Ename);
+	END;
+	/
+
+Q) Write a PL/SQL program to display employee name based on employee id?
+
+
+	DECLARE 
+	L_Eid  number(3);
+	L_Ename varchar2(10);
+	BEGIN
+	L_Eid:=&eid;
+	select ename into L_Ename from emp where eid=L_Eid;
+	DBMS_OUTPUT.PUT_LINE(L_Ename);
+	END;
+	/
+
+
+Q) Write a PL/SQL block to display employee id , employee name, employee salary whose employee id is 205?
+	
+	DECLARE 
+	L_Eid   number(3);
+	L_Ename  varchar2(10);
+	L_Esal  number(10,2);
+	BEGIN
+	select eid,ename,esal into L_Eid,L_Ename,L_Esal from emp where eid=205;
+	DBMS_OUTPUT.PUT_LINE(L_Eid||' '||L_Ename||' '||L_Esal);
+	END;
+	/
+
+
+Percentage(%) TYPE Attribute 
+============================
+It is used to declare a local variable with respect to column type.
+
+syntax:
+	variable_name   table_name.column_name%TYPE;
+
+
+
+Q) Write a PL/SQL block to display employee id , employee name, employee salary whose employee id is 205?
+	
+	DECLARE 
+	L_Eid   emp.eid%TYPE;
+	L_Ename  emp.ename%TYPE;
+	L_Esal  emp.esal%TYPE;
+	BEGIN
+	select eid,ename,esal into L_Eid,L_Ename,L_Esal from emp where eid=205;
+	DBMS_OUTPUT.PUT_LINE(L_Eid||' '||L_Ename||' '||L_Esal);
+	END;
+	/
+
+
+Percentage(%) ROWTYPE attribute
+===============================
+It is used to declare a local variable which holds complete row of a table.
+
+syntax:
+------
+	variable_name   table_name%ROWTYPE;
+
+We can't display rowtype variable directly. 
+
+We need to use table_name.column_name to dispaly the data from rowtype variables.
+
+
+Q) Write a PL/SQL program to display employees information whose employee id is 202?
+
+	DECLARE 
+	A  emp%ROWTYPE;
+	BEGIN
+	select * into A from emp where eid=202;
+	DBMS_OUTPUT.PUT_LINE(A.eid||' '||A.ename||' '||A.esal||' '||A.deptno||' '||A.job);
+	END;
+	/
+
+
+Q) Write a PL/SQL program to display employees information based on employee id?
+
+	DECLARE 
+	L_Eid emp.eid%TYPE;
+	A  emp%ROWTYPE;
+	BEGIN
+	L_Eid:=&id;
+	select * into A from emp where eid=L_Eid;
+	DBMS_OUTPUT.PUT_LINE(A.eid||' '||A.ename||' '||A.esal||' '||A.deptno||' '||A.job);
+	END;
+	/
+
+Assignment 
+===========
+Q) Write a oracle query to display last three records from a table?
+
+SELECT * FROM (
+    SELECT *
+    FROM student
+    ORDER BY sno DESC
+)
+WHERE ROWNUM <= 3;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

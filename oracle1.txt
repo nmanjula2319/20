@@ -1,0 +1,285 @@
+Types of Data
+=============
+We have two types of data.
+
+1) Unstructured Data 
+
+2) Structured Data
+
+1) Unstructured Data 
+---------------------
+Data which is not in readable format is called unstructured data.
+
+In general, meaning less data is called unstructured data.
+
+File contains unstructured data.
+
+ex:
+	
+	302     Lakemba		SYD		NSW		AUS	
+
+2) Structured Data
+------------------
+Data which is in readable format is called structured data.
+
+In general, meaningfull data is called structured data.
+
+Databases contains structured data.
+
+ex:
+	Unit    Locality	City		State		Country
+	----	-------		----		----		-------
+	302     Lakemba		SYD		NSW		AUS	
+	
+
+Oracle 
+========
+Oracle is one of the database which is used to store the structured data.
+
+It is a product of Oracle Corporation.
+
+It is classified into two types.
+
+			      Oracle 
+				|
+	|------------------------------------------|
+	SQL					PL/SQL
+(Structured Query Language)		(Procedural/Structured Query Language)
+
+
+Client-Server Architecture 
+===========================
+In this architecture we will see how our data will store from frontend to backend.
+
+Diagram: oracle1.1
+
+FrontEnd
+---------
+The one which is visible to the enduser to perform some operations is called frontend.
+ex:	
+	JAVA, .Net, Python, Perl and etc.
+
+Communication Channel(CC)
+-------------------------
+It acts like a bridge between frontend and backend.
+ex:
+	JDBC - Java Database Connectivity 
+	ODBC - Open Database Connectivity
+	PDBC - Python Database Connectivity 
+
+BackEnd
+-------
+The one which is not visible to the enduser but it performs operations based on the instructions given by frontend is called backend.
+ 
+
+
+Management System
+=================
+Management system is a software which is used to manage the database.
+
+Using management system we can perform following acitivities very easily.
+
+1) Adding the new data 
+
+2) Modifying the existing data 
+
+3) Selecting the required data
+
+4) Deleting the unnecessary data 
+
+DBMS
+=====
+A database along with software which is used to manage the database is called database management system.
+
+RDBMS
+======
+If a database is designed based on relational theories is called relational database management system.
+
+ex:
+	Oracle, MySQL , SQL Server, PostgreSQL, Sybase, TeraData and etc.
+
+
+SQL
+====
+SQL stands for Structured Query Language which is pronounce as SEQUEL.
+
+This language is used to interact with Oracle Database.
+
+It is a case insensitive language.
+
+It is a command based language.
+
+Every command must starts with verb.
+ex:
+	select,update,delete,insert,merge and etc.
+
+Every command must ends with semicolon(;).
+
+It is developed by Mr.Codd in 1972 (By IBM).
+
+Sub Languages of SQL
+====================
+We have five sub languages of SQL.
+
+1) DDL  (Data Definition Language)
+
+2) DML  (Data Manipulation Language)
+
+3) DRL/DQL (Data Retrieve/Query Language)
+
+4) TCL  (Transaction Control Language)
+
+5) DCL  (Data Control Language)
+
+
+1) DDL  (Data Definition Language)
+----------------------------------
+This language is used to maintain the objects in database.
+
+It is a combination of five commands.
+
+ex:
+	create,alter,drop,truncate and rename.
+
+
+2) DML  (Data Manipulation Language)
+--------------------------------------
+This language is used to manipulate the data present in database.
+
+It is a collection of four commands.
+
+ex:
+	insert,update,delete and merge.
+
+
+3) DRL/DQL (Data Retrieve/Query Language)
+------------------------------------------
+This language is used to retrieve the data present in database.
+
+It is a collection of one command.
+
+ex:
+	select 
+
+4) TCL  (Transaction Control Language)
+----------------------------------------
+This language is used to maintain the transaction in a database.
+
+It is a collection of three commands.
+
+ex:
+	commit, rollback and savepoint.
+
+
+5) DCL  (Data Control Language)
+-------------------------------
+This language is used to control the access of data to the user.
+
+It is a collection of two commands.
+
+ex:
+	grant and revoke 
+
+
+
+Table
+======
+Table is an object which is used to represent the data.
+
+A table is a collection of rows and columns.
+
+Oracle is a case insensitive language but the data present in table is a case sensitive.
+
+ex:
+	--------------------------------
+	NO |	NAME	|	ADD
+	--------------------------------
+	101|	Alan	|	Texas
+	--------------------------------
+	102|	Jose	|	Vegas
+	--------------------------------
+	103|	Linda	|	Florida
+	--------------------------------
+
+	Here we have 3 rows and 3 columns.
+
+Oracle 
+========
+
+Version		:	10g or 11g 
+
+Vendor		:	Oracle Corporation 
+
+Category 	:	Express Edition Software
+
+Port No		:	1521
+
+username	:	system (default)
+
+password	:	admin 
+
+Website		:	www.oracle.com/in/database
+
+Download link	:
+https://drive.google.com/file/d/0B9rC21sL6v0td1NDZXpkUy1oMm8/view?usp=drive_link&resourcekey=0-aKooR3NmAh_eLo_qGw_inA
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

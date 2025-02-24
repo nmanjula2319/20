@@ -1,0 +1,319 @@
+Q) Write a java program to merge two arrays and display them in sorting order?
+
+input:
+	arr1 = 4 1 3 2 5
+	arr2 = 6 9 10 7 8
+
+output:
+	1 2 3 4 5 6 7 8 9 10
+
+
+ex:
+---
+import java.util.Arrays;
+class Test  
+{
+	public static void main(String[] args) 
+	{
+		int[] arr1 ={4,1,3,2,5};
+		int[] arr2 ={6,9,10,7,8};
+
+		int size1=arr1.length;
+		int size2=arr2.length;
+
+		arr1=Arrays.copyOf(arr1,size1+size2);
+
+		int j=0;
+		for(int i=size1;i<arr1.length;i++)
+		{
+			arr1[i]=arr2[j++];
+		}
+
+		Arrays.sort(arr1);
+
+		//display elements
+		for(int i:arr1)
+		{
+			System.out.print(i+" ");
+		}
+
+	}
+}
+
+
+
+ii) Number functions
+=====================
+
+abs()
+------
+	It will return absoluate value.
+	ex:
+		select abs(-20) from dual; // 20
+		select abs(45) from dual; // 45
+
+sqrt()
+------
+	It will return square root value.
+	ex:
+		select sqrt(25) from dual; // 5 
+		select sqrt(26) from dual; // 5.09 
+
+power(A,B)
+---------
+	It will return power value.
+	ex:
+		select power(2,5) from dual; // 2*2*2*2*2 =32
+		select power(5,3) from dual; //125
+
+ceil()
+------
+	It will return ceil value.
+	ex:	
+		select ceil(10.5) from dual; // 11 
+		select ceil(10.2) from dual; // 11 
+
+floor()
+-------
+	It will return floor value.
+	ex:
+		select floor(40.6) from dual; // 40
+		select floor(34.2) from dual; // 34 
+
+round()
+------
+	It will return nearest value.
+	ex:
+		select round(10.6) from dual; // 11 
+		select round(10.5) from dual; // 11 
+		select round(10.4) from dual; // 10 
+
+trunc()
+-----
+	It will remove decimals.
+	ex:
+		select trunc(10.56) from dual; //10
+		select trunc(-19.67) from dual; // -19 	
+
+greatest()
+----------
+	It will return highest value.
+	ex:
+		select greatest(101,102,103) from dual;  //103
+
+least() 
+------
+	It will return lowest value.
+	ex:
+		select least(101,102,103) from dual; //101
+
+
+
+Working with Date values
+=========================
+Every database software supports different date patterns.
+ex:
+	oracle --> dd-MMM-yy
+	MySQL  --> yyyy-MM-dd
+	and etc.
+
+emp1 table
+===============
+drop table emp1;
+
+create table emp1(eid number(3),ename varchar2(10),edoj date);
+
+insert into emp1 values(501,'Alan','01-JAN-24');
+
+insert into emp1 values(502,'Nelson',sysdate);
+
+insert into emp1 values(503,'Kelvin',current_date);
+
+commit;
+
+
+iii) Date functions
+====================
+
+ADD_MONTHS() 
+-------------
+	It is used to add the months in a given date.
+	ex:
+		select ADD_MONTHS('01-JAN-24',5) from dual;		
+
+MONTHS_BETWEEN()
+---------------
+	It will return number of months in a given two dates.
+	ex:
+		select MONTHS_BETWEEN('01-JAN-24','01-MAY-24') from dual;
+
+		select ABS(MONTHS_BETWEEN('01-JAN-24','01-MAY-24')) from dual;
+
+		select ABS(MONTHS_BETWEEN('01-JAN-24','15-MAY-24')) from dual;
+
+
+NEXT_DAY()
+--------
+	It will return next date of a given day in a week.
+	ex:
+		select NEXT_DAY('23-MAY-24','sunday') from dual;
+
+		select NEXT_DAY('23-MAY-24','thursday') from dual;
+
+		select NEXT_DAY('01-JAN-24','monday') from dual;
+
+LAST_DAY()
+----------
+	It will return last date of a month.
+	ex:
+		select LAST_DAY('21-JAN-24') from dual;
+
+		select LAST_DAY('19-FEB-24') from dual;
+
+iv) Conversion functions
+=========================
+It is used to convert from one type to another type.
+
+ex:
+	TO_CHAR() 
+
+We have two pseudo of to_char() function.
+
+1) number to_char()
+-----------------
+	It will accept '9' in digits , Euros and dollar symbol.
+	ex:
+		select eid,ename,esal from emp;
+		select eid,ename,TO_CHAR(esal,'9,999') from emp;
+		select eid,ename,TO_CHAR(esal,'99,999') from emp;
+		select eid,ename,TO_CHAR(esal,'$99,999') from emp;
+		select eid,ename,TO_CHAR(esal,'$99,999') as ESAL from emp;
+		select eid,upper(ename) as ENAME, TO_CHAR(esal,'$99,999') as ESAL from emp;	
+		
+
+2) date to_char()
+----------------
+	ex:
+		select TO_CHAR(sysdate,'dd-MM-yyyy') from dual;
+
+		select TO_CHAR(sysdate,'yyyy-MM-dd') from dual;
+
+		select TO_CHAR(sysdate,'day') from dual;
+		
+		select TO_CHAR(sysdate,'dy') from dual;
+	
+		select TO_CHAR(sysdate,'month') from dual;
+
+		select TO_CHAR(sysdate,'mon') from dual;
+
+		select TO_CHAR(sysdate,'year') from dual;
+		
+		select TO_CHAR(sysdate,'dd') from dual;
+	
+		select TO_CHAR(sysdate,'mm') from dual;
+
+		select TO_CHAR(sysdate,'yyyy') from dual;
+		
+		select TO_CHAR(sysdate,'HH:MI:SS') from dual;
+
+		select TO_CHAR(sysdate,'dd-MM-yyyy HH:MI:SS') from dual;
+
+
+
+Group by clause
+===============
+Group by clause is used to divide the rows into groups so that we can apply group functions.
+
+A column which we used in group by clause , same column name we need to use in select clause.
+
+ex:
+
+Q) Write a query to display sum of salary of each department?
+
+	select sum(esal),deptno from emp group by deptno;
+
+
+Q) Write a query to dispaly highest salary of each job?
+
+	select max(esal),job from emp group by job;
+
+
+Q) Write a query to display average salary of each department?
+
+
+	select avg(esal),deptno from emp group by deptno;
+
+
+Having clause
+=============
+Having clause is used to filter the rows from group by clause.
+
+Having clause must placed after group by clause.
+
+ex:
+
+Q) Write a query to display sum of salary of each department where sum of salary is grater then 30000?
+
+	select sum(esal),deptno from emp group by deptno having sum(esal)>30000;
+
+
+Q) Write a query to display minimum salary of each job where minimum salary if greater then 15000?
+
+	select min(esal),job from emp group by job having min(esal)>15000;
+
+
+Order by clause
+===============
+Order by clause is used to arrange the rows in a table.
+
+By default it will arrange all the rows in ascending order.
+
+ex:
+	select * from emp order by eid;
+
+	select * from emp order by eid desc;
+
+	select * from emp order by ename;	
+
+
+Note:
+-----
+group by clause, having clause and order by clause.
+
+ex:
+Q) Write a query to display sum of salary of each department where sum of salary is grater then 30000?
+
+	select sum(esal),deptno from emp group by deptno having sum(esal)>30000;	
+
+	or
+
+	select sum(esal),deptno from emp group by deptno having sum(esal)>30000 order by deptno desc;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

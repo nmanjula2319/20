@@ -1,0 +1,391 @@
+DDL commands
+============
+1) create  - (tables)
+2) alter   - (columns)
+3) drop    - (tables) 
+4) truncate- (rows/records) 
+5) rename  - (tables) 
+
+
+alter command
+==============
+Using alter command we can perform following acitivities very easily.
+
+i) Adding new columns.
+
+ii) Modifying existing columns.
+
+iii) Dropping the columns.
+
+iv) Renaming the columns.
+
+
+
+i) Adding new columns
+---------------------
+Using alter command we can add new columns.
+
+syntax:
+--------
+	alter table <table_name> ADD (col_name datatype(size));
+ex:
+	alter table student ADD (state varchar2(10));
+	alter table student ADD (pincode number(8));
+	alter table student ADD (state varchar2(10),pincode number(8));
+
+	update student set state='Telangana' where sno=101;
+
+ii) Modifying existing columns
+-------------------------------
+Using alter command we can modify the column.
+
+We can increase or decrease the size of a column only when existing values are fit into new size.
+
+syntax:
+-------
+	alter table <table_name> modify (col datatype(size));
+ex:
+	desc student;
+
+	alter table student modify(state varchar2(15));
+
+	desc student;
+
+We can change the datatype of a column only if that column is empty.
+
+ex:
+	desc student;
+	
+	alter table student modify(pincode varchar2(8));	
+
+	desc student;
+
+
+iii) Dropping the columns
+------------------------
+Using alter command we can drop the columns.
+
+syntax:
+------
+	alter table <table_name> DROP (col_name);
+
+ex:
+	alter table student DROP (pincode,state);
+
+
+iv) Renaming the columns
+------------------------
+Using alter command we can rename the column.
+
+syntax:
+-----
+	alter table <table_name> RENAME column <old_name> to <new_name>;
+ex:
+	alter table student rename column sadd to city;
+
+	alter table student rename column sno to rollno;
+
+	alter table emp rename column esal to dailywages;
+
+	alter table emp rename column job to designation;
+
+
+
+drop command
+============
+It is used to drop the tables from database.
+
+syntax:
+	drop table student;
+	drop table emp;
+	drop table dept;
+
+
+truncate command
+=================
+Truncate command is used to delete the records permanently from database.
+
+syntax:
+	truncate table <table_name>;
+
+ex:
+	truncate table student;
+	truncate table dept;
+	truncate table emp;
+
+Q) What is the difference between delete and truncate command?
+
+delete						truncate 
+-----------					---------
+It is a DML command.				It is a DDL command.
+
+It deletes the data temperory.			It deletes the data permanently.
+
+We can rollback the data.			We can't rollback the data.
+
+Where clause can be used.			Where clause can't be used.
+
+
+
+rename command
+==============
+It is used to rename the table name.
+
+syntax:
+------
+	rename <old_name> to <new_name>;
+ex:
+	rename emp to employees;
+	rename dept to department;
+	rename student to students;
+
+
+Functions
+==========
+Functions are used to manipulate data items and give the result.
+
+We have two types of functions.
+
+1) Group Functions / Multiple Rows Functions 
+
+2) Scalar Functions / Single Row Functions 
+
+1) Group Functions
+-------------------
+Group functions are applicable for multiple rows.
+
+We have following list of group of functions.
+
+ex:
+	sum(), avg(), max(), min(), count(*) and count(expression).
+
+
+Q) Write a query to display sum of salary of each employee?
+
+	select sum(esal) from emp;
+
+
+Q) Write a query to display average salary of each employee?
+
+	select avg(esal) from emp;
+
+
+Q) Write a query to display highest salary from emp table?
+
+	select max(esal) from emp;
+
+
+Q) Write a query to display least salary from emp table?
+	
+	select min(esal) from emp;
+
+
+Q) Write a query to display number of records present in database table?
+
+	select count(*) from emp;
+
+
+Q) What is the difference between count(*) and count(Expression) ? 
+
+count(*)
+---------
+It will count number of records present in a database table.
+
+It will add null records.
+
+ex:
+	select count(*) from student;
+
+
+count(Expression)
+------------------
+It will return number of values present in a database table column.
+
+It will not add null values.
+
+ex:
+	select count(eid) from emp;
+
+	select count(comm) from emp;
+
+userlist table
+==============
+drop table userlist;
+
+create table userlist(uname varchar2(10), pwd varchar2(10));
+
+insert into userlist values('raja','rani');
+
+insert into userlist values('king','kingdom');
+
+commit;
+
+
+Q) Write a query to check given credentials are valid or not?
+
+	select count(*) from userlist where uname='raja' and pwd='rani'; // 1 
+
+	or 
+
+	select count(*) from userlist where uname='raja' and pwd='rani2'; //0 
+
+
+
+Dual table
+===========
+Dual table is a dummy table which contains one row and one column.
+
+It is used to perform arithmetic operations and to see the current system date.
+
+ex:
+	select 10+20 from dual;
+
+	select 10*20 from dual;
+
+	select sysdate from dual;
+	
+	select current_date from dual;
+
+
+2) Scalar Function
+-------------------
+Scalar functions are applicable for single row.
+
+We have following list of sclar functions.
+
+i) Character functions 
+
+ii) Number functions 
+
+iii) Date functions 
+
+iv) Conversion functions 
+
+
+i) Character functions
+-----------------------
+upper()
+-------
+	It will convert lowercase to uppercase.
+	ex:
+		select upper('oracle training') from dual;
+
+lower()
+-------
+	It will convert uppercase to lowercase.
+	ex:
+		select lower('ORACLE TRAINING') from dual;
+
+initcap()
+---------
+	It will display initial letter capital.
+	ex:
+		select initcap('oracle training') from dual;
+
+lpad()
+------
+	It will add the character towards left side.
+	ex:
+		select lpad('oracle',10,'z') from dual; // zzzzoracle 
+
+rpad()
+------
+	It will add the character towards right side.
+	ex:
+		select rpad('oracle',10,'z') from dual;// oraclezzzz
+
+ltrim()
+------
+	It will trim the characters towards left side.
+	ex:
+		select ltrim('zzoraclezz','z') from dual; // oraclezz
+
+rtrim()
+------
+	
+	It will trim the characters towards right side.
+	ex:
+		select ltrim('zzoraclezz','z') from dual; // zzoracle
+
+trim()
+-----
+	It wil trim the characters from both the sides.
+	ex:
+		select trim('z' from 'zzoraclezz') from dual;
+
+concat() 
+--------
+	IT will concatinate two strings.
+	ex:
+		select concat('ihub','talent') from dual;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

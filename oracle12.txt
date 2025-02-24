@@ -1,0 +1,503 @@
+To see the output in PL/SQL we need to use below command.
+ex:
+	SQL> set serveroutput  on
+
+
+Cursors 
+========
+Cursor is a PL/SQL block which is used to run SQL commands.
+
+We have two types of cursors.
+
+1) Implicit cursor 
+
+2) Explicit cursor 
+
+1) Implicit cursor
+------------------
+All the activities related to cursor like opening the cursor, processing the cursor and closing the cursor which is done automatically is called implicit cursor.
+
+We have four types of implicit cursor attributes.
+
+i) SQL%ISOPEN 
+----------------
+	It is a boolean attribute which always returns false.
+
+ii) SQL%FOUND 
+-------------
+	It is a boolean attribute which returns true if SQL command is success and returns 
+	false is SQL command is failed.
+
+iii) SQL%NOTFOUND
+----------------
+	It is completely reverse of SQL%FOUND.
+
+	It is a boolean attribute which returns false if SQL command is success and returns 
+	true is SQL command is failed.
+
+iv) SQL%ROWCOUNT
+------------
+	It will return number of records effected in a database table.
+
+ex:
+---
+	BEGIN
+	IF SQL%ISOPEN THEN
+	DBMS_OUTPUT.PUT_LINE('Cursor is Open');
+	ELSE
+	DBMS_OUTPUT.PUT_LINE('Cursor is Closed');
+	END IF;
+	END;
+	/
+
+
+ex:
+---
+	BEGIN
+	update student set sname='rani' where sno=105;
+	IF SQL%FOUND THEN 
+	DBMS_OUTPUT.PUT_LINE('Record Updated');
+	ELSE
+	DBMS_OUTPUT.PUT_LINE('Record Not Updated');
+	END IF;
+	END;
+	/
+
+ex:
+	BEGIN
+	update student set sname='rani' where sno=106;
+	IF SQL%FOUND THEN 
+	DBMS_OUTPUT.PUT_LINE('Record Updated');
+	ELSE
+	DBMS_OUTPUT.PUT_LINE('Record Not Updated');
+	END IF;
+	END;
+	/
+
+ex:
+---
+	BEGIN
+	update student set sname='lisa' where sno=105;
+	IF SQL%NOTFOUND THEN 
+	DBMS_OUTPUT.PUT_LINE('Record Updated');
+	ELSE
+	DBMS_OUTPUT.PUT_LINE('Record Not Updated');
+	END IF;
+	END;
+	/
+
+ex:
+----
+	BEGIN
+	update student set sname='raja';
+	DBMS_OUTPUT.PUT_LINE(SQL%ROWCOUNT||' Records Updated');
+	END;
+	/
+
+
+2) Explicit cursor 
+-------------------
+All the activities related to cursor like opening the cursor, processing the cursor and closing the cursor which is done by a user is called explicit cursor.
+
+We need to explicit cursor when select statement returns more then one row.
+
+We have four types of explicit cursor attributes.
+
+i) %ISOPEN 
+-----------
+	It is a boolean attribute which returns true if cursor is open and returns false 
+	if cursor is closed.
+
+ii) %FOUND
+---------
+	It is a boolean attribute which returns true if SQL command is success and returns 
+	false is SQL command is failed.
+
+iii) %NOTFOUND 
+-----------
+	It completely reverse of %FOUND.
+	
+	It is a boolean attribute which returns false if SQL command is success and returns 
+	true is SQL command is failed.
+
+
+iv) %ROWCOUNT 
+-------------
+	It will return number of records effecting in a database table.
+
+
+steps to work with explicit cursor
+---------------------------------
+step1:
+-----
+	Declare the cursor. 
+
+step2:
+-----
+	Open the cursor. 
+
+step3:
+----
+	Fetch the data from cursor to local variables.
+
+step4:
+-----
+	Close the cursor.
+
+
+Q) Write a PL/SQL program to display employee names from employee table?
+
+	DECLARE 
+	CURSOR C1 is select ename from emp;
+	L_Ename  emp.ename%TYPE;
+	BEGIN
+	OPEN C1;
+	LOOP
+	FETCH C1 into L_Ename;
+	EXIT WHEN C1%NOTFOUND;
+	DBMS_OUTPUT.PUT_LINE(L_Ename);
+	END LOOP;
+	CLOSE C1;
+	END;
+	/
+
+
+Q) Write a PL/SQL program to display employee id employee name, employee salary from emp table?
+
+	DECLARE 
+	CURSOR C2 is select eid,ename,esal from emp;
+	L_Eid  emp.eid%TYPE;
+	L_Ename emp.ename%TYPE;
+	L_Esal  emp.esal%TYPE;
+	BEGIN
+	OPEN C2;
+	LOOP
+	FETCH C2 into L_Eid,L_Ename,L_Esal;
+	EXIT WHEN C2%NOTFOUND;
+	DBMS_OUTPUT.PUT_LINE(L_Eid||' '||L_Ename||' '||L_Esal);
+	END LOOP;
+	CLOSE C2;
+	END;
+	/
+
+
+Q) Write a PL/SQL program to display employees information from emp table?
+
+	DECLARE
+	CURSOR C3 is select * from emp;
+	A emp%ROWTYPE;
+	BEGIN
+	OPEN C3;
+	LOOP
+	FETCH C3 into A;
+	EXIT WHEN C3%NOTFOUND;
+	DBMS_OUTPUT.PUT_LINE(A.eid||' '||A.ename||' '||A.esal||' '||A.deptno||' '||A.job);
+	END LOOP;
+	CLOSE C3;
+	END;
+	/
+
+
+PL/SQL procedures
+=================
+It is a named PL/SQL block which compiles and executes in a database for repeated execution.
+
+syntax:
+------
+	create or replace procedure <procedure_name>
+	is
+	begin
+	-
+	-
+	-
+	end;
+	/
+
+Q) Write a procedure to display Hello World?
+
+	create or replace procedure p1 
+	is
+	begin
+	DBMS_OUTPUT.PUT_LINE('Hello World');
+	END;
+	/
+
+To execute the procedure we need to use below command.
+ex:
+	exec  p1;
+
+PL/SQL procedures may contain three parameters.
+
+1) IN parameter 
+
+2) OUT parameter 
+
+3) IN OUT parameter 
+
+
+
+1) IN parameter 
+---------------
+It takes value from the user.
+
+
+Q) Write a procedure to perform sum of two numbers?
+
+create or replace procedure sum(A IN number,B IN number)
+is
+C number;
+begin
+C:=A+B;
+DBMS_OUTPUT.PUT_LINE(C);
+END;
+/	
+
+To execute the procedure we need to use below command.
+ex:
+	exec  sum(10,20);
+
+
+2) OUT parameter 
+----------------
+It returns the value to the user.
+
+
+Q) Write a PL/SQL procedure to perform sum of two numbers and return sum?
+
+create or replace procedure ret_sum(A IN number,B IN number,C OUT number)
+is
+begin
+C:=A+B;
+END;
+/
+
+steps to call PL/SQL procedure having OUT parameters
+----------------------------------------------------
+step1:
+-----
+	Declare a bind variable 
+	ex:
+		variable N number;
+
+step2:
+------
+	Execute the procedure
+	ex:
+		exec  ret_sum(10,20,:N);
+
+step3:
+----
+	Print the bind variable.
+	ex:
+		print N;
+
+
+3) IN OUT parameter
+--------------------
+It takes value from the user and return the value to the user.
+
+
+Q) Write a PL/SQL procedure to return square of a given number>
+
+create or replace procedure ret_square(N IN OUT number)
+is
+begin
+N:=N*N;
+END;
+/
+
+steps to call PL/SQL procedure having IN OUT parameters
+-------------------------------------------------------
+step1:
+-----
+	Declare a bind variable.
+	ex:
+		Variable N number;
+
+step2:
+-----
+	Initialize the bind variable.
+	ex:
+		BEGIN
+		:N:=5;
+		END;
+		/
+step3:
+-----
+	Execute the procedure.
+	ex:
+		exec   ret_square(:N);
+
+step4:
+----
+	Print the bind variable.
+	ex:
+		print N;
+	
+
+Q) Write a query to display list of procedures present in database?
+
+	select object_name from user_objects where object_type='PROCEDURE';
+
+
+
+Q) Write a query to see the source code of a procedure?
+
+	select text from user_source where name='P1';
+
+
+DML operations are allowed in PL/SQL procedures.
+
+
+Q)Write a PL/SQL procedure to insert a record into student table?
+
+	create or replace procedure insert_record(L_Sno IN student.sno%TYPE,
+							L_Sname IN student.sname%TYPE,
+							  L_Sadd IN student.sadd%TYPE)
+	is
+	begin
+	insert into student values(L_Sno,L_Sname,L_Sadd);
+	DBMS_OUTPUT.PUT_LINE('Record Inserted');
+	END;
+	/
+
+To execute the procedure we need to use below command.
+ex:
+	exec  insert_record(106,'Alan','USA');
+
+
+
+Q) Write a PL/SQL procedure to update student name based on student id?
+
+create or replace procedure update_student(L_Sno IN  student.sno%TYPE)
+is
+begin
+update student set sname='Jack' where sno=L_Sno;
+DBMS_OUTPUT.PUT_LINE('Record Updated');
+END;
+/
+
+To execute the procedure we need to use below command.
+ex:
+	exec  update_student(106);
+
+
+
+Q) Write a PL/SQL procedure to delete student record based on student number?
+
+create or replace procedure delete_student(L_Sno  IN number)
+is
+begin
+delete from student where sno=L_Sno;
+DBMS_OUTPUT.PUT_LINE('Record Deleted');
+END;
+/
+
+To see the output in PL/SQL we need to use below command.
+ex:
+	exec  delete_student(106);
+
+
+Q) Write a query to drop the procedure?
+
+	drop procedure p1;
+	drop procedure sum;
+	drop procedure ret_sum;
+	drop procedure ret_square;
+	drop procedure update_student;
+	drop procedure insert_record;
+	drop procedure delete_student;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Interview Question
+================
+You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security systems connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
+
+Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,3,1]
+Output: 4
+Explanation: Rob house 1 (money = 1) and then rob house 3 (money = 3).
+Total amount you can rob = 1 + 3 = 4.
+Example 2:
+
+Input: nums = [2,7,9,3,1]
+Output: 12
+Explanation: Rob house 1 (money = 2), rob house 3 (money = 9) and rob house 5 (money = 1).
+Total amount you can rob = 2 + 9 + 1 = 12.
+
+ex:
+---
+class Solution 
+{
+    public static void main(String[] args)
+    {
+        int[] nums={2,7,9,3,1};
+		Solution s=new Solution();
+		System.out.println(s.rob(nums));
+    }
+    public int rob(int[] nums) 
+    {
+		int sum=0;
+        for(int i=0;i<nums.length;i++)
+		{
+			if(i%2==0)
+			{
+				sum+=nums[i];
+			}
+
+		}
+
+		return sum;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

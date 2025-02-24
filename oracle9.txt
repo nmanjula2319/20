@@ -1,0 +1,328 @@
+View
+=====
+View is a virtual representation of a data from one or more then one table.
+
+View does not consumes the memory.
+
+View does not have any data.
+
+View will get the data when we execute select command.
+
+A table which is used to create a view is called base table or above table.
+
+syntax:
+------
+	create view <view_name> as select stmt;
+
+We have different types of views.
+
+1) Simple View 
+
+2) Complex View 
+
+3) With read only view 
+
+4) With check option view 
+
+5) Materialized view 
+
+1) Simple View
+---------------
+If a view is created by using one base table is called simple view.
+
+ex:
+	create view v1 as select * from emp;
+
+	create view v1 as select eid,ename,esal from emp;
+
+	create view v1 as select * from emp where deptno=10;
+
+	create view v1 as select * from emp where ename like 'A%';
+
+	create view v1 as select * from emp where eid IN(201,202,203);
+	
+	create view v1 as select * from emp where comm is null;
+
+	create view v1 as select * from emp where deptno<>10;
+
+	select * from v1;
+Note:
+----
+	DML operations are allowed in simple view.
+	ex:
+		delete from v1 where eid=207;
+
+		select * from v1;
+
+		select * from emp;
+
+2) Complex View 
+---------------
+If a view is created by using more then one base table is called complex view.
+
+ex:
+	create view v2 as select e.eid,e.ename,e.esal,d.dname,d.dloc from emp e, dept d
+	where(e.deptno=d.deptno);
+
+	select * from v2;
+
+
+Note:
+----
+	DML operations are not allowed in complex view.
+	ex:
+		delete from v2; //cannot delete from view
+
+
+3) With read only view
+----------------------
+If we want to create view  by using one base table and DML operations not required then we need to use with read only view.
+
+ex:
+	create view v3 as select * from emp with read only;
+
+	select * from v3;
+
+Note:
+----
+	DML operations are not allowed.
+	ex:
+		delete from v3;  //cannot perform a DML operation
+
+
+4) With check option view 
+-------------------------
+If we want to create view  by using one base table and DML operations are required only if our condition is true then we need to use with check option view.
+
+ex:
+	create view v4 as select * from emp where deptno=30 with check option;
+
+	select * from v4;
+
+	insert into v4 values(208,'Alan',45000,50,'Salesman',500); // view WITH CHECK OPTION
+
+	insert into v4 values(208,'Lisa',45000,30,'Salesman',500);	
+
+
+5) Materialized view 
+---------------------
+To create a materialized view a table must have primary key.
+
+ex:
+	alter table emp ADD primary key(eid);
+
+	create materialized view v5 as select * from emp;
+
+	select * from v5;
+
+	delete from emp where eid=206;
+	commit;	
+	select * from emp; // 5 records 
+
+	select * from v5; // 6 records 
+
+In order to see the changes in a view from base table we need to referesh the materialized view.
+ex:
+	exec   DBMS_SNAPSHOT.REFRESH('v5');
+
+	select * from emp; // 5 records 
+
+	select * from v5; // 5 records 
+
+
+Q) Write a query to see the list of views present in database?
+
+	select view_name from user_views;
+
+
+Q) Write a query to drop the view?
+
+	drop view v1;
+	drop view v2;
+	drop view v3;
+	drop view v4;
+
+
+Q) Write a query to drop the materialized view?
+
+	drop materialized view v5;
+
+
+Merge Command
+=============
+Merge command is a combination of insert and update command.
+
+student10 table
+---------------
+drop table student10;
+create table student10(sno number(3),sname varchar2(10),sadd varchar2(12));
+insert into student10 values(101,'raja','hyd');
+insert into student10 values(102,'ravi','delhi');
+insert into student10 values(103,'ramana','vizag');
+commit;
+
+student20 table
+---------------
+drop table student20;
+create table student20(sno number(3),sname varchar2(10),sadd varchar2(12));
+insert into student20 values(103,'Jose','USA');
+insert into student20 values(104,'Mark','UK');
+commit;
+
+ex:
+
+merge into student10 s1
+using student20 s2
+on(s1.sno=s2.sno)
+when matched 
+then update set sname=s2.sname,sadd=s2.sadd
+when not matched
+then insert(sno,sname,sadd) values (s2.sno,s2.sname,s2.sadd);
+
+select * from student10;
+select * from student20;
+
+
+Sub Queries
+============
+If we declare a query inside another query is called sub query.
+
+Sub queries are used to select the records based on unknown values.
+
+In sub query, first inner query will execute then outer query.
+
+A query can be nested upto 32 levels.
+
+We have following list of sub queries.
+
+1) Single Row Subquery
+
+2) Multiple Row Subquery
+
+3) Multiple Column Subquery 
+
+1) Single Row Subquery
+-----------------------
+If a sub query returns only one row is called single row subquery.
+
+ex:
+	SQL Query
+	----------
+		select * from emp where eid=203;
+
+	Sub Query
+	---------
+		select * from emp where eid=(select eid from emp where ename='Nelson');
+
+
+ex:
+---
+	SQL Query
+	---------
+		select * from emp where eid=201 and esal=9000;
+
+	Sub Query
+	---------
+		select * from emp where 
+		eid=(select eid from emp where ename='Alan') and 
+		esal=(select esal from emp where eid=201);
+
+
+Q) Write a query to display second highest salary from emp table?
+
+	select max(esal) from emp where esal<(select max(esal) from emp);
+
+
+Q) Write a query to display all employees records whose salary is greater then Lisa salary?
+
+	select * from emp where esal>(select esal from emp where ename='Lisa');
+
+
+2) Multiple Row Subquery
+------------------------
+If a subquery returns more then one row then it is called multiple row sub query.
+
+In multiple row sub query , we need to use multiple row operators.
+
+We have three types of multiple row operators.
+
+1) ANY 
+
+2) ALL
+
+3) IN 
+
+1) ANY 
+-------
+	select * from emp where esal > ANY(select esal from emp where deptno=10);
+
+	select * from emp where esal < ANY(select esal from emp where deptno=10);
+
+2) ALL
+------
+	select * from emp where esal > ALL(select esal from emp where deptno=10);
+
+		
+3) IN
+-----
+	select * from emp where esal IN (select esal from emp where deptno=10);
+
+
+3) Multiple Column subquery
+---------------------------
+If subquery returns more then one column then we need to use multiple column subquery.
+
+In multiple column subquery we will use IN operator.
+
+ex:
+	select * from emp where(eid,ename,esal) IN (select eid,ename,esal from emp);
+
+	select eid,ename,esal from emp where(eid,ename,esal) IN (select eid,ename,esal from emp);
+	
+
+
+Assignment
+===========
+Q) Write a query to display last three records from emp table?
+
+Q) Write a query to delete duplicate records from emp table?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

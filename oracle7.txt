@@ -1,0 +1,282 @@
+TCL Commands
+============
+1) commit
+
+2) rollback 
+
+3) savepoint 
+
+1) commit
+----------
+It is used to make the changes permanent to database.
+
+ex:
+	drop table student;
+	
+	create table student(sno number(3),sname varchar2(10),sadd varchar2(12));
+
+	insert into student values(101,'raja','hyd');
+
+	insert into student values(102,'ravi','delhi');
+
+	commit;
+
+	select * from student; // 2 records 
+
+
+
+2) rollback 
+------------
+It is used to undo the changes which are not-permanent.	
+ex:
+	drop table student;
+	
+	create table student(sno number(3),sname varchar2(10),sadd varchar2(12));
+
+	insert into student values(101,'raja','hyd');
+
+	insert into student values(102,'ravi','delhi');
+
+	commit;
+
+	insert into student values(103,'ramulu','pune');
+
+	insert into student values(104,'rakesh','vizag');
+
+
+	select * from student; // 4 records 
+
+	rollback;
+
+	select * from student; // 2 records
+
+ 
+
+3) savepoint 
+--------------
+It is used to make a logical transaction in a database.
+
+Instead of complete rollback ,we can rollback upto savepoint.
+
+syntax:
+	savepoint <save_point_name>;
+
+ex:
+---
+	drop table student;
+	
+	create table student(sno number(3),sname varchar2(10),sadd varchar2(12));
+
+	insert into student values(101,'raja','hyd');
+
+	insert into student values(102,'ravi','delhi');
+
+	savepoint sp1;
+		
+	insert into student values(103,'ramulu','pune');
+
+	insert into student values(104,'rakesh','vizag');
+
+	savepoint sp2;
+
+	insert into student values(105,'Alan','USA');
+
+	insert into student values(106,'Jose','UK');
+
+	select * from student; // 6 records
+
+	rollback to sp2; 
+
+	select * from student; // 4 records
+
+	rollback to sp1;
+
+	select * from student; // 2 records 
+
+
+Pseudo Columns
+==============
+Pseudo column means a column which is not real.
+
+We have two pseudo columns.
+
+1) ROWNUM
+
+2) ROWID
+
+1) ROWNUM
+---------
+ROWNUM always starts with 1 and increment by 1.
+
+ROWNUM values are temperory.
+
+Once the query is executed we will loss the ROWNUM values.
+
+ex:
+	select eid,ename,esal from emp;
+
+	select ROWNUM,eid,ename,esal from emp;
+
+
+2)ROWID
+-------
+ROWID is a memory location where our records will store in a database table.
+
+ROWID is permanent.
+
+ex:
+	select eid,ename,esal from emp;
+	select ROWID,eid,ename,esal from emp;
+	select ROWID,ROWNUM,eid,ename,esal from emp;
+
+
+Interview Queries
+------------------
+
+Q) Write a query to read first three records from emp table?
+
+	select * from emp where rownum<=3;
+
+
+
+Q) Write a query to display 4th record from emp table?
+
+	select * from emp where rownum<=4
+	minus 
+	select * from emp where rownum<=3;
+
+
+DCL commands
+=============
+1) Grant 
+
+2) Revoke 
+
+Schema 
+------
+	It is a memory location which is used to run SQL commands.
+
+Privileges
+----------
+	Permissions given to a user is called privileges.
+	
+	In general, rights given to a user is called privileges.
+
+	We have two types of privileges.
+
+	1) System privilege 
+	-------------------
+		Permission given by DBA to user.
+
+	2) Object privilege 
+	--------------------
+		Permission give by one user to another user.
+
+
+1) Grant
+--------
+It is used to grant the permissions to the user.
+
+syntax:
+----
+	grant <privilege1>,<privilege2> to user;
+
+
+
+2) Revoke 
+---------
+It is used to take back the permissions from the user.
+
+syntax:
+-----
+	revoke <privilege1>,<privilege2> from user;
+
+
+DBA> alter session set "_ORACLE_SCRIPT"=true;
+
+DBA> create user swami identified by swami;
+
+DBA> create user renuka identified by renuka;
+
+
+SWAMI>  conn swami/swami (logon denied)
+
+RENUKA> conn renuka/renuka (logon denied)
+
+
+DBA> grant connect,resource to swami,renuka;
+
+DBA> ALTER USER swami quota 100M on users;
+
+SWAMI>  conn swami/swami 
+
+RENUKA> conn renuka/renuka 
+
+
+SWAMI> 
+create table employees(eid number(3),ename varchar2(10),esal number(10));
+insert into employees values(501,'Alan',10000);
+insert into employees values(502,'Jose',20000);
+insert into employees values(503,'Kelvin',30000);
+commit;
+select * from employees; //3 records 
+
+RENUKA> select * from employees ; //table or view does not exit
+
+
+SWAMI> grant select on employees to renuka;
+
+
+RENUKA> select * from swami.employees;
+
+RENUKA> delete from swami.employees; (insufficient privileges)
+
+SWAMI> grant update,delete on employees to renuka;
+
+RENUKA> delete from swami.employees;
+RENUKA> commit; 
+
+SWAMI> select * from employees;
+
+SWAMI> revoke select,update,delete on employees from renuka;
+
+RENUKA> disc  
+SWAMI > disc 
+
+DBA> revoke connect,resource from swami,renuka;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
